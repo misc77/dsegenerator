@@ -3,7 +3,9 @@ from docx import Document
 """ 
     readTable
 
-    reads the content of a table
+    reads the content of a word table
+    and puts the content into an instance of checklist class.
+    This instance will be persisted into an Sqlite table
 """
 def readTable(table):
     r = c = 0
@@ -15,7 +17,6 @@ def readTable(table):
         c=0
         for col in table.columns:
             c=c+1
-            print("c " + str(c))
             cell = table.cell(r-1, c-1)
             print(str(r) +"," + str(c))
             print(cell.text)
@@ -39,7 +40,7 @@ def readChecklist(file):
         readTable(t)
         print("####### END (" + str(i) + ") #######")
         print("")
-        if i>=2:
+        if i>=5:
             break
 
     print("document finished - contained " + str(i) + " tables")
