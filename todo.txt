@@ -1,0 +1,5 @@
+- Abfrage Checkboxen implementieren. 
+- Mappinglogik von Klasse auf Zieldokument
+- Mapping von Checkliste auf Klasse
+- Versionsbeziehung zwischen Checkliste, Zieldokument und Mapping.
+- Versionsnummern für Checkliste und Zieldokument einführen. 
