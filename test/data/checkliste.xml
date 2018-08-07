@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<checkliste xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="checkliste.xsd" version="1.0">
+   <titel wordType="table" tabelle="1">
+		<titel zeile="1" spalte="1" ></titel>
+		<version zeile="2" spalte="1"></version>
+   </titel>
+   <verantwortlicher wordType="table" tabelle="2">
+		<titel zeile="1" spalte="1" wordType="text"></titel>
+		<hinweis zeile="2" spalte="1" wordType="text"></hinweis>
+		<adressTabelle zeile="2" spalte="1" wordType="table" tabelle="1">
+			<label zeile="1" spalte="1" wordType="text"></label>
+			<adresse zeile="1" spalte="2" wordType="text"> </adresse>
+		</adressTabelle>
+   </verantwortlicher>
+   <dsb wordType="table" tabelle="3">
+		<titel zeile="1" spalte="1" wordType="text"></titel>
+		<hinweis zeile="2" spalte="1" wordType="text"></hinweis>
+		<adressTabelle zeile="2" spalte="1"  wordType="table" tabelle="1">
+			<label zeile="1" spalte="1" wordType="text"></label>
+			<adresse zeile="1" spalte="2" wordType="text"></adresse>
+		</adressTabelle>
+   </dsb>
+</checkliste>
