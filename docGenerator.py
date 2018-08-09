@@ -17,7 +17,8 @@ class DocGenerator:
     def parseTemplate(self, version = "1.0"):
         res = Resources()
         filename = res.getDSETemplate(version)
-        tree = ET.parse(filename)   """ TODO: Exception Handling """
+        """ TODO: Exception Handling """
+        tree = ET.parse(filename)   
         root = tree.getroot()
         templateObject = XMLObject()
         templateObject.xmlVersion = root.attrib.get("version")

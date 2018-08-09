@@ -32,7 +32,8 @@ def parseChecklist(checklistFile):
     version = readVersion(checklistDocument)
     res = Resources()
     checklistTemplate = res.getChecklisteTemplate(version)
-    tree = ET.parse(checklistTemplate) """ TODO: Exception Handling """
+    """ TODO: Exception Handling """
+    tree = ET.parse(checklistTemplate) 
     root = tree.getroot()
     checklistObject = XMLObject()
     checklistObject.xmlVersion = root.attrib.get("version")
