@@ -1,49 +1,73 @@
 from docx import Document
-import xml.etree.ElementTree as ET
 from xmlObject import XMLObject
 from resources import Resources
+import xml.etree.ElementTree as ET
+import const
+import logging
+
+def isWordTypeTable(child):
+    if child.attrib.get(const.CHECKLIST_ATTRIB_WORDTYPE) == const.CHECKLIST_ATTRIB_WORDTYPE_TABLE:
+        return True
+    else:
+        return False
+
 
 def readVersion(checklistDocument):
     version = checklistDocument.tables[0].table.cell(1,0).text[2:]
-    print(version)
+    if version is None:
+        version = "v1.0"
     return version
 
-def parseTable(xmlElement, checklistDocument):
-    pos = int(xmlElement.attrib.get("tabelle"))
-    table = checklistDocument.tables[pos-1]
-    tableObject = {}
-    
-    for child in xmlElement:
-        zeile = int(child.attrib.get("zeile"))-1
-        spalte = int(child.attrib.get("spalte"))-1
-        print (str(zeile) + " " + str(spalte))
 
-        if child.attrib.get("wordType") == "table":
+def parseTable(xmlElement, checklistDocument):
+    pos = int(xmlElement.attrib.get(const.CHECKLIST_ATTRIB_TAB))
+    table = checklistDocument.tables[pos-1]
+    tableObject = {}    
+    for child in xmlElement:
+        zeile = int(child.attrib.get(const.CHECKLIST_ATTRIB_ROW))-1
+        spalte = int(child.attrib.get(const.CHECKLIST_ATTRIB_COL))-1       
+        if isWordTypeTable(child):
             tableObject[child.tag] = parseTable(child, table.cell(zeile,spalte))
         else:
-            tableObject[child.tag] = table.cell(zeile,spalte).text
-            print (child.tag, child.attrib) 
-            print (table.cell(zeile,spalte).text)
-    
+            tableObject[child.tag] = table.cell(zeile,spalte).text      
+
     return tableObject
 
+
 def parseChecklist(checklistFile):
-    checklistDocument = Document(checklistFile)
-    version = readVersion(checklistDocument)
-    res = Resources()
-    checklistTemplate = res.getChecklisteTemplate(version)
-    """ TODO: Exception Handling """
-    tree = ET.parse(checklistTemplate) 
-    root = tree.getroot()
-    checklistObject = XMLObject()
-    checklistObject.xmlVersion = root.attrib.get("version")
+    log = logging.getLogger("DSEGenerator.checklistParser")
+    try:
+        checklistDocument = Document(checklistFile)
+    except (FileNotFoundError):
+        log.error("File '" + checklistFile + "' not Found! " + FileNotFoundError.strerror)
+        checklistDocument = None
 
-    for elem in root:
-        print(elem.attrib.get("wordType"))
-        if elem.attrib.get("wordType") == "table":
-            checklistObject.addElement(elem.tag, parseTable(elem, checklistDocument))
+    if checklistDocument is not None:
+        version = readVersion(checklistDocument)
+        checklistTemplate = Resources.getChecklisteTemplate(version)
 
-    """ setting instance variables """    
-    if "titel" in checklistObject.elementList:
-        checklistObject.wordVersion = checklistObject.elementList["titel"]["version"]
+        try:
+            tree = ET.parse(checklistTemplate) 
+        except (ET.ParseError):
+            log.error("Checklist Template '" + checklistTemplate + "' could not be read!")
+            tree = None
+            checklistObject = None
+
+        if tree != None:
+            root = tree.getroot()
+            checklistObject = XMLObject()
+            checklistObject.xmlVersion = root.attrib.get(const.DSEDOC_ATTRIB_VERSION)
+            if Resources.validVersions(version, checklistObject.xmlVersion):
+                for elem in root:
+                    if isWordTypeTable(elem):
+                        checklistObject.addElement(elem.tag, parseTable(elem, checklistDocument))
+
+                if const.CHECKLIST_ATTRIB_TITLE in checklistObject.elementList:
+                    checklistObject.wordVersion = checklistObject.elementList[const.CHECKLIST_ATTRIB_TITLE][const.CHECKLIST_ATTRIB_VERSION]
+            else:
+                log.warn("No valid versions! Processing skipped!")
+    else:
+        log.error("Processing of Template skipped! Please check Error log!")
+        checklistObject = None
+
     return checklistObject

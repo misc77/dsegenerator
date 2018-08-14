@@ -1,11 +1,17 @@
 from checklistParser import parseChecklist
 from docGenerator import DocGenerator
+from resources import Resources
+import logger
 
-"""checklistObject = parseChecklist(     "C:/Users/misc2/Documents/PyProjects/DSEGenerator/test/data/checkliste.docx" )
-print("checklistobject...")
-print(checklistObject.getElementList()) 
-print(checklistObject.wordVersion + " " + checklistObject.xmlVersion)"""
-
-docGenerator = DocGenerator()
-docGenerator.parseTemplate("1.0")
+log = logger.getLogger()
+checklistObject = parseChecklist( "C:/Users/misc2/Documents/PyProjects/DSEGenerator/test/data/checkliste.docx" )
+if checklistObject is not None:
+    docGenerator = DocGenerator(checklistObject)
+    retval = docGenerator.saveDocument()
+    if retval == True:
+        log.info("Document processed successfully!")
+    else:
+        log.error("Document hasn't been created! Error occured during processing!")
+else:
+    log.error("Checklist Document hasn't been processed!")
 
