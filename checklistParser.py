@@ -11,6 +11,11 @@ def isWordTypeTable(child):
     else:
         return False
 
+def isWordTypeCheckboxlist(child):
+    if child.attrib.get(const.CHECKLIST_ATTRIB_WORDTYPE) == const.CHECKLIST_ATTRIB_WORDTYPE_CHECKBOXLIST:
+        return True
+    else:
+        return False
 
 def readVersion(checklistDocument):
     version = checklistDocument.tables[0].table.cell(1,0).text[2:]
@@ -18,6 +23,37 @@ def readVersion(checklistDocument):
         version = "v1.0"
     return version
 
+def parseCheckboxlist(xmlElement, checklistDocument):
+    log = logging.getLogger("DSEGenerator.parseCheckboxlist")
+    checkboxStatelist = []
+    values = {}
+    i = 0    
+    element = checklistDocument._element.xml
+    elementliste = element.split("<")
+    for e in elementliste:
+        if e.startswith("w14:checked "):
+            e = e.split('"')[1]
+            if e == "1" : 
+                checkboxStatelist.append(True)
+            else:
+                checkboxStatelist.append(False)
+    log.debug("list: " + str(checkboxStatelist))
+    log.debug("doc: " + str(checklistDocument.text))
+    for e in checklistDocument.text.split("\n"):
+        e=e.strip()
+        if i==0:
+            i=i+1
+            continue
+        else:
+            try:
+                if len(e) > 0:
+                    log.debug("append key: " + e + "value: " + str(checkboxStatelist[i-1]) )
+                    values[e] = checkboxStatelist[i-1]
+            except (IndexError):
+                log.warn("list index out of range! " + IndexError.__str__)
+        i=i+1
+    log.debug("returning values: " + str(values))
+    return values
 
 def parseTable(xmlElement, checklistDocument):
     pos = int(xmlElement.attrib.get(const.CHECKLIST_ATTRIB_TAB))
@@ -28,6 +64,8 @@ def parseTable(xmlElement, checklistDocument):
         spalte = int(child.attrib.get(const.CHECKLIST_ATTRIB_COL))-1       
         if isWordTypeTable(child):
             tableObject[child.tag] = parseTable(child, table.cell(zeile,spalte))
+        elif isWordTypeCheckboxlist(child):
+            tableObject[child.tag] = parseCheckboxlist(child, table.cell(zeile,spalte))
         else:
             tableObject[child.tag] = table.cell(zeile,spalte).text      
 
@@ -69,5 +107,5 @@ def parseChecklist(checklistFile):
     else:
         log.error("Processing of Template skipped! Please check Error log!")
         checklistObject = None
-
+    log.debug("finished creation checklistObject: " + str(checklistObject))
     return checklistObject

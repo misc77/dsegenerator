@@ -23,12 +23,11 @@ class DocGenerator:
             if endpos > startpos:
                 skript = text[startpos:endpos]
                 cleanSkript = skript.replace("{","").replace("}","")
-                cleanSkript = "self.checklistObject.elementList" + cleanSkript
-
+                #cleanSkript = "self.checklistObject.elementList" + cleanSkript
                 try:
                     text = text.replace(skript, eval(cleanSkript)) 
                     log.info("Evaluated Text: " + text)
-                except (IndexError, OverflowError, SyntaxError, TypeError):                    
+                except (IndexError, OverflowError, SyntaxError, TypeError, NameError):                    
                         log.warn("Error occured! Skipped evaluation! String to evaluate '" + text + "' will be replaced by ''.")
                         text = text.replace(skript, "")    
 
@@ -81,8 +80,7 @@ class DocGenerator:
 
     def saveDocument(self, versionnumber=1):
         log = logging.getLogger("DSEGenerator.docGenerator.saveDocument")
-        filename = Resources.getOutputPath() + "/" + self.checklistObject.created.strftime("%Y%m%d%H%M%S") + "_dseDocument_"+str(versionnumber)+".docx"
-        
+        filename = Resources.getOutputPath() + "/" + self.checklistObject.created.strftime("%Y%m%d%H%M%S") + "_dseDocument_"+str(versionnumber)+".docx"        
         try:
             self.dseDocument.save(filename)
         except (PermissionError):

@@ -22,34 +22,39 @@
     <Kapitel titel="Allgemeine Angaben">
         <Abschnitt titel="Verantwortlicher">
             Verantwortlicher für die Verarbeitung personenbezogener Daten auf dieser Webseite ist:
-            Firmenname: {["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[0]}
-            Straße:     {["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[1]}
-            PLZ, Ort:   {["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[2]}
-            Land:       {["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[3]}
-            Tel:        {["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[4]}
-            Fax:        {["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[5]}
-            Email:      {["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[6]}
-            Webseite:   {["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[7]}
-            Link Impressum: {["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[8]}
+            Firmenname: {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[0]}
+            Straße:     {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[1]}
+            PLZ, Ort:   {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[2]}
+            Land:       {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[3]}
+            Tel:        {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[4]}
+            Fax:        {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[5]}
+            Email:      {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[6]}
+            Webseite:   {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[7]}
+            Link Impressum: {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[8]}
         </Abschnitt>
         <Abschnitt titel="Datenschutzanfragen">
             Sämtliche Anfragen zur Verarbeitung Ihrer personenbezogenen Daten oder die Ausübung Ihrer im Folgenden genannten Rechte richten Sie bitte per E-Mail, Fax oder Post an folgende Adresse:
-            Firmenname: {["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[0]}
-            Straße:     {["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[1]}
-            PLZ, Ort:   {["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[2]}
-            Land:       {["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[3]}
-            Tel:        {["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[4]}
-            Fax:        {["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[5]}
-            Email:      {["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[6]}
+            Firmenname: {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[0]}
+            Straße:     {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[1]}
+            PLZ, Ort:   {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[2]}
+            Land:       {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[3]}
+            Tel:        {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[4]}
+            Fax:        {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[5]}
+            Email:      {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[6]}
         </Abschnitt>
         <Abschnitt titel="Datenschutzbeauftragter">
             Die Kontaktdaten unseres Datenschutzbeauftragten sind:
             Vorname, Nachname: {["dsb"]["adressTabelle"]["adresse"].split("\n")[0]}
-            Firmenname: {["dsb"]["adressTabelle"]["adresse"].split("\n")[2]}
-            Straße:     {["dsb"]["adressTabelle"]["adresse"].split("\n")[3]}
-            PLZ, Ort:   {["dsb"]["adressTabelle"]["adresse"].split("\n")[4]}
-            Land:       {["dsb"]["adressTabelle"]["adresse"].split("\n")[5]}
-            Tel:        {["dsb"]["adressTabelle"]["adresse"].split("\n")[6]}
+            Firmenname: {self.checklistObject.elementList["dsb"]["adressTabelle"]["adresse"].split("\n")[2]}
+            Straße:     {self.checklistObject.elementList["dsb"]["adressTabelle"]["adresse"].split("\n")[3]}
+            PLZ, Ort:   {self.checklistObject.elementList["dsb"]["adressTabelle"]["adresse"].split("\n")[4]}
+            Land:       {self.checklistObject.elementList["dsb"]["adressTabelle"]["adresse"].split("\n")[5]}
+            Tel:        {self.checklistObject.elementList["dsb"]["adressTabelle"]["adresse"].split("\n")[6]}
+        </Abschnitt>
+    </Kapitel>
+    <Kapitel titel="Allgemeine Hinweise zur Verarbeitung personenbezogener Daten">
+        <Abschnitt titel="Arten der verarbeiteten Daten">
+            Wir erheben und verarbeiten auf unserer Webseite {self.checklistObject.getKeyList("host","datenliste")}
         </Abschnitt>
     </Kapitel>
 </DSEDokument>

@@ -1,5 +1,2 @@
-- Abfrage Checkboxen implementieren. 
-- Mappinglogik von Klasse auf Zieldokument
-- Versionsbeziehung zwischen Checkliste, Zieldokument und Mapping.
-- Versionsnummern für Zieldokument einführen. 
+﻿- Abfrage Checkboxen implementieren.  
 - Objekt mit Quell und Zieldokument in DB ablegen
