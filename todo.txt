@@ -1,2 +1,9 @@
 ﻿- Abfrage Checkboxen implementieren.  
-- Objekt mit Quell und Zieldokument in DB ablegen
+- Objekt mit Quell und Zieldokument und MetaDaten in DB ablegen
+- GUI:
+    - komfortabel  verarbeiten
+    - version check dialog
+    - Zugriff auf Datenbank und Wiederherstellen bereits erzeugter Dokumente mit relevanten Templates und MetaDaten
+    - Visualisierung Log-Einträge
+    - Editierung Config
+    

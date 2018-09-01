@@ -1,5 +1,5 @@
 import const
-import logging
+import logger
 import os
 import xml.etree.ElementTree as ET
 from xmlObject import XMLObject
@@ -16,14 +16,13 @@ class DocGenerator:
 
 
     def evaluateFormular(self, text):
-        log = logging.getLogger("DSEGenerator.docGenerator.evaluateFormular")
+        log = logging.getLogger()
         startpos = text.index("{")
         if startpos > 0:
             endpos = text.index("}")+1
             if endpos > startpos:
                 skript = text[startpos:endpos]
                 cleanSkript = skript.replace("{","").replace("}","")
-                #cleanSkript = "self.checklistObject.elementList" + cleanSkript
                 try:
                     text = text.replace(skript, eval(cleanSkript)) 
                     log.info("Evaluated Text: " + text)

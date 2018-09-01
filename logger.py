@@ -1,21 +1,11 @@
 import logging
+import configProvider
 import configparser
 from resources import Resources
 
 
 def getLogger():
-    config = configparser.ConfigParser()
-    try:
-        config.read(Resources.getConfigFile())
-    except(FileNotFoundError):
-        print("ERROR: File '" + Resources.getConfigFile() + "' NOT found! " + FileNotFoundError.strerror)
-        config = None
-
-    if config is not None and 'Logging' in config:
-        logLevel = config['Logging'].getint("APPLICATION_LOG_LEVEL")
-    else:
-        logLevel = logging.DEBUG  
-       
+    logLevel = configProvider.getConfigEntryOrDefault('Logging', 'APPLICATION_LOG_LEVEL', logging.DEBUG)
     logger = logging.getLogger("DSEGenerator")
     logger.setLevel(logLevel)
 
