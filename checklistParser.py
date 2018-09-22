@@ -4,6 +4,7 @@ from resources import Resources
 import xml.etree.ElementTree as ET
 import const
 import logging
+import wx
 
 def isWordTypeTable(child):
     if child.attrib.get(const.CHECKLIST_ATTRIB_WORDTYPE) == const.CHECKLIST_ATTRIB_WORDTYPE_TABLE:
@@ -18,10 +19,16 @@ def isWordTypeCheckboxlist(child):
         return False
 
 def readVersion(checklistDocument):
-    version = checklistDocument.tables[0].table.cell(1,0).text[2:]
-    if version is None:
-        version = "v1.0"
-    return version
+    log = logging.getLogger("DSEGenerator.readVersion")
+    try:
+        version = checklistDocument.tables[0].table.cell(1, 0).text
+        print("version: " + version)
+        if version is None:
+            version = "1.0"
+        return version
+    except (IndexError):
+        log.error("list index out of range!")
+        wx.MessageBox("Can't determine version of selected Document! Processing aborted. Please select another one!", caption="Error occured!")
 
 def parseCheckboxlist(xmlElement, checklistDocument):
     log = logging.getLogger("DSEGenerator.parseCheckboxlist")
@@ -50,7 +57,7 @@ def parseCheckboxlist(xmlElement, checklistDocument):
                     log.debug("append key: " + e + "value: " + str(checkboxStatelist[i-1]) )
                     values[e] = checkboxStatelist[i-1]
             except (IndexError):
-                log.warn("list index out of range! " + IndexError.__str__)
+                log.error("list index out of range!")
         i=i+1
     log.debug("returning values: " + str(values))
     return values
@@ -90,6 +97,9 @@ def parseChecklist(checklistFile):
             log.error("Checklist Template '" + checklistTemplate + "' could not be read!")
             tree = None
             checklistObject = None
+        except (FileNotFoundError):
+            wx.MessageBox("Error occured when opening Checklist Template! " + FileNotFoundError.strerror, caption="Error occured!")
+            log.error("Checklist Template '" + checklistTemplate + "' could not be found! " + FileNotFoundError.strerror)
 
         if tree != None:
             root = tree.getroot()

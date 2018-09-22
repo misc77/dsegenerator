@@ -1,12 +1,19 @@
 import configProvider
 import logger
 import wx
+import time
 from apscheduler.schedulers.background import BackgroundScheduler
 from dseGenerator import DSEGenerator
+from docGenerator import DocGenerator
 from checklistParser import parseChecklist
 from resources import Resources
 
 class DSEGeneratorApp(wx.Frame):
+    """[summary]
+    
+    Arguments:
+        wx {[Frame]} -- [description]
+    """
     
     def __init__(self, *args, **kwargs):
         super(DSEGeneratorApp, self).__init__(*args, **kwargs)
@@ -15,78 +22,147 @@ class DSEGeneratorApp(wx.Frame):
         #Scheduler   
         self.log_scheduler = BackgroundScheduler()
         self.generator = DSEGenerator()
-        self.initUI()
-        self.log_scheduler.add_job(self.LogUpdate, 'interval', seconds=10, id='log_job')
-        self.log_scheduler.start()
-        
+        self.doc_generator = None
+        self.log_scheduler.add_job(self.log_update, 'interval', seconds=10, id='log_job')
+        self.log_scheduler.start() 
+        self.init_ui()    
     
-    def initUI(self):
+    def init_ui(self):
+        """[summary]
+           Generates the UI of the Application
+        """ 
         self.SetSize((800,600))
         self.SetTitle("DSEGenerator Application")
         self.Centre()
-        panel = wx.Panel(self)
-        sizer = wx.GridBagSizer(3,8)
+        self.panel = wx.Panel(self)
+        self.sizer = wx.GridBagSizer(3,16)
+        self.border = 10
 
+        self.line = wx.StaticLine(self.panel, -1, style=wx.LI_VERTICAL)
+        self.line.SetSize((100,30))
         #Checklist Label
-        checklistLabel = wx.StaticText(panel, label="Checklist Document:")
-        sizer.Add(checklistLabel, pos=(0,0), flag=wx.LEFT|wx.RIGHT|wx.ALIGN_CENTER_VERTICAL, border=8)
+        checklist_label = wx.StaticText(self.panel, label="Checklist Document:")
+        font = checklist_label.GetFont()
+        font.PointSize += 2
+        font = font.Bold()
+        checklist_label.SetFont(font)
+        self.sizer.Add(checklist_label, pos=(1,0), flag=wx.LEFT|wx.RIGHT|wx.ALIGN_CENTER_VERTICAL, border=self.border)
         #FileDialog Button
-        filePicker = wx.FilePickerCtrl(panel, message="Please select a Checklist Document in *.docx Format:", wildcard="*.docx", style = wx.FLP_USE_TEXTCTRL )
-        filePicker.SetTextCtrlGrowable(True)
-        filePicker.SetTextCtrlProportion(20)
-        sizer.Add(filePicker, pos=(0,1), span=(0,2), flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=8)
-
+        file_picker = wx.FilePickerCtrl(self.panel, message="Please select a Checklist Document in *.docx Format:", wildcard="*.docx", style = wx.FLP_USE_TEXTCTRL )
+        file_picker.SetTextCtrlGrowable(True)
+        file_picker.SetTextCtrlProportion(20)
+        self.sizer.Add(file_picker, pos=(1,1), span=(1,2), flag=wx.EXPAND|wx.LEFT|wx.RIGHT,border=self.border)
         #Version of Document selected
-        versionLabel = wx.StaticText(panel, label="Version:")
-        sizer.Add(versionLabel, pos=(1,0), flag=wx.LEFT|wx.RIGHT|wx.ALIGN_CENTER_VERTICAL, border=8)
-        self.versionText = wx.TextCtrl(panel)
-        self.versionText.SetEditable(False)
-        sizer.Add(self.versionText, pos=(1,1),  flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=8)
+        version_label = wx.StaticText(self.panel, label="Checklist Word-Document Version:")
+        version_label.SetFont(font)
+        self.sizer.Add(version_label, pos=(2,0), flag=wx.LEFT|wx.RIGHT|wx.ALIGN_CENTER_VERTICAL, border=self.border)
+        self.version_text = wx.StaticText(self.panel)
+        self.version_text.SetFont(font)
+        self.sizer.Add(self.version_text, pos=(2,1),  flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=self.border)
+        version_label_xml = wx.StaticText(self.panel, label="Checklist XMLTemplate Version:")
+        version_label_xml.SetFont(font)
+        self.sizer.Add(version_label_xml, pos=(3,0), flag=wx.LEFT|wx.RIGHT|wx.ALIGN_CENTER_VERTICAL, border=self.border)
+        self.version_text_xml = wx.StaticText(self.panel)
+        self.version_text_xml.SetFont(font)
+        self.sizer.Add(self.version_text_xml, pos=(3,1),  flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=self.border)
+        self.sizer.Add(self.line, pos=(5,0), span=(1,3), flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=self.border)
+
+        #Status
+        status_label = wx.StaticText(self.panel, label="Processing Status:")
+        status_label.SetFont(font)
+        self.sizer.Add(status_label, pos=(7,0), flag=wx.LEFT|wx.RIGHT|wx.ALIGN_CENTER_VERTICAL, border=self.border)
+        self.status_text = wx.StaticText(self.panel, label="Please select Checklist to read!")
+        self.status_text.SetFont(font)
+        self.sizer.Add(self.status_text, pos=(7,1), flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=self.border)
+            
+        #Buttons
+        self.generate_button = wx.Button(self.panel, label="Generate DSE document!", name="generate")
+        self.generate_button.Disable()
+        self.sizer.Add(self.generate_button, pos=(9,0), flag=wx.LEFT|wx.ALIGN_CENTER_VERTICAL, border=self.border)
+        self.Bind(wx.EVT_BUTTON, self.on_generate, self.generate_button)
+        
+        self.save_button = wx.Button(self.panel, label="Save DSE Document!", name="save")
+        self.save_button.Disable()
+        self.sizer.Add(self.save_button, pos=(9,1), flag=wx.LEFT|wx.ALIGN_CENTER_VERTICAL, border=self.border)
+        self.Bind(wx.EVT_BUTTON, self.on_save, self.save_button)
 
         #Log 
-        logLabel = wx.StaticText(panel, label="Log:")
-        sizer.Add(logLabel, pos=(7,0), flag=wx.EXPAND|wx.LEFT|wx.RIGHT,  border=8)
-        self.logView = wx.TextCtrl(panel, size=(200,200), style=wx.TE_MULTILINE|wx.HSCROLL|wx.TE_READONLY|wx.TE_BESTWRAP|wx.TE_RICH2, pos=wx.DefaultPosition)
-        self.logView.SetEditable(False)
-        sizer.Add(self.logView, pos=(8,0), span=(3,3), flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=8)
+        self.log_label = wx.StaticText(self.panel, label="Log:")
+        self.sizer.Add(self.log_label, pos=(15,0), flag=wx.EXPAND|wx.LEFT|wx.RIGHT,  border=self.border)
+        self.log_view = wx.TextCtrl(self.panel, size=(200,200), style=wx.TE_MULTILINE|wx.HSCROLL|wx.TE_READONLY|wx.TE_BESTWRAP|wx.TE_RICH2, pos=wx.DefaultPosition)
+        self.log_view.SetEditable(False)
+        self.sizer.Add(self.log_view, pos=(16,0), span=(3,3), flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=self.border)
 
-        sizer.AddGrowableCol(2)
+        self.sizer.AddGrowableCol(2)
         #sizer.AddGrowableRow(0)
-        panel.SetSizer(sizer)
+        self.panel.SetSizer(self.sizer)    
 
-        #Menubar
-        menubar = wx.MenuBar()
-        fileMenu = wx.Menu()
-        fileItem = fileMenu.Append(wx.ID_EXIT, 'Exit', 'Exit application')
-        menubar.Append(fileMenu, '&File')
-        self.SetMenuBar(menubar)
+        self.init_menu()
 
         #Events
-        self.Bind(wx.EVT_FILEPICKER_CHANGED, self.OnPickFile, filePicker)
-        self.Bind(wx.EVT_MENU, self.OnExit, fileItem)
+        self.Bind(wx.EVT_FILEPICKER_CHANGED, self.on_pick_file, file_picker)
+        
 
+    def init_menu(self):
+        """ Initialize Menu
+        """
+        #Menubar
+        menubar = wx.MenuBar()
+        file_menu = wx.Menu()
+        view_menu = wx.Menu()
+        file_item = file_menu.Append(wx.ID_EXIT, 'Exit', 'Exit application')
+        self.view_show_log_item = view_menu.Append(wx.ID_ANY, 'Show Log', 'Show Log View', kind=wx.ITEM_CHECK)
+        view_menu.Check(self.view_show_log_item.GetId(), False)
+        self.hide_log()
+        menubar.Append(file_menu, '&File')
+        menubar.Append(view_menu, '&View')
+        self.SetMenuBar(menubar)
+        #Events
+        self.Bind(wx.EVT_MENU, self.on_exit, file_item)
+        self.Bind(wx.EVT_MENU, self.on_show_log, self.view_show_log_item)
 
-    #--- EVENT HANDLER
-    def OnPickFile(self, e):
+    #--- EVENT HANDLER FUNCTIONS
+    def on_pick_file(self, evt):
+        """Takes care of loading Checklist file
+        Arguments:
+            e {[type]} -- [description]
+        """
         log = logger.getLogger()
-        if e.GetPath() != None:
-            self.generator.checklistFile = e.GetPath()
-            checklistDoc = parseChecklist(self.generator.checklistFile)
-            self.generator.checklistObject = checklistDoc
-            if checklistDoc.wordVersion != None:
-                self.versionText.write(checklistDoc.wordVersion)
+        if evt.GetPath() != None:
+            self.generator.checklistFile = evt.GetPath()
+            checklist_doc = parseChecklist(self.generator.checklistFile)
+            self.generator.checklistObject = checklist_doc
+            if checklist_doc.wordVersion != None:
+                self.version_text.SetLabelText(checklist_doc.wordVersion)
+                self.version_text_xml.SetLabelText(checklist_doc.xmlVersion)
+                self.status_text.SetLabelText("Checklist Document successfully processed!")      
+                self.generate_button.Enable()          
+            else:
+                self.status_text.SetLabelText("Error during processing! Please refer to log for details!")
         else:
+            wx.MessageBox("Warning! No file has been selected! Please select a valid file in order to proceed!")
             log.warn("No file has been selected!")
     
-    def LogUpdate(self):
-        file_handle = open(Resources.getLogFile(), "r")
-        self.logView.SetInsertionPoint(0)
-        self.logView.SetValue(file_handle.read())
-        self.logView.AppendText("")
-        self.logView.Refresh()
-        file_handle.close()
+    def on_generate(self, evt):
+        """[summary]
+        
+        Arguments:
+            e {[type]} -- [description]
+        """
+        log = logger.getLogger()
+        log.info("Button pushed")
+        if self.generator.checklistObject != None:
+            self.generate_dse_document()
+        else:
+            wx.MessageBox("Warning! DSE Document can't be generated because of missing or incomplete parsed Checklist Document!", caption="Warning!")
+            log.warn("No checklist has been parsed! Please select a valid checklist document!")
 
-    def OnExit(self, e):
+    def on_exit(self, evt):
+        """[summary]
+        
+        Arguments:
+            e {[type]} -- [description]
+        """
         dlg = wx.MessageDialog  (self, 
                                 "Do you really want to close this application?",
                                 "Confirm Exit", wx.OK|wx.CANCEL|wx.ICON_QUESTION)
@@ -95,6 +171,67 @@ class DSEGeneratorApp(wx.Frame):
         if result == wx.ID_OK:
             self.Close()
 
+    def on_show_log(self, evt):
+        """Shows/Hides the Log View
+        
+        Arguments:
+            evt {[type]} -- [description]
+        """
+        if self.view_show_log_item.IsChecked():
+            self.show_log()
+        else:
+            self.hide_log()    
+
+    def on_save(self, evt):
+        """Saves DSE Document to File system
+        
+        Arguments:
+            evt {[type]} -- [description]
+        """
+        if self.doc_generator.dseDocument is not None:
+            dlg = wx.FileDialog(self, "Please select destination to save generated document!", ".", "", "Word Document (*.docx)|*.docx", wx.FD_SAVE|wx.FD_OVERWRITE_PROMPT)
+            if dlg.ShowModal() == wx.ID_OK:
+                path = dlg.GetPath()
+                self.doc_generator.saveDocument(self.version_text_xml.GetLabelText(), path)
+            else:
+                wx.MessageBox("Warning! DSE Document hasn't been saved!", caption="Warning!")
+        else:
+            wx.MessageBox("Warning! DSE Document has not yet generated! Please Generate DSE Document when Checklist has been read successfully!", caption="Warning!")  
+
+    #--- End of Event Handler
+
+    def hide_log(self):
+        self.log_view.Hide()
+        self.log_label.Hide()
+        self.log_scheduler.pause_job("log_job")
+        self.SetSize((800,400)) 
+
+    def show_log(self):
+        self.log_view.Show()   
+        self.log_label.Show()
+        self.log_scheduler.resume_job("log_job")
+        self.SetSize((800,600))
+
+    def log_update(self):
+        """
+            Updates Logview with content of log file
+        """
+        file_handle = open(Resources.getLogFile(), "r")
+        self.log_view.SetInsertionPoint(0)
+        self.log_view.SetValue(file_handle.read())
+        self.log_view.AppendText("")
+        self.log_view.Refresh()
+        file_handle.close()
+
+    def generate_dse_document(self):
+        """ Generates DSE Document by 
+        """
+        self.status_text.SetLabelText("DSE Document is being processed...")
+        self.doc_generator = DocGenerator(self.generator.checklistObject)       #Implement concurrency!!
+        self.doc_generator.parseTemplate(self.version_text_xml.GetLabelText())
+        self.status_text.SetLabelText("DSE Document successfully processed!")
+        self.save_button.Enable()     
+ 
 
 def main():
    app = wx.App()

@@ -1,4 +1,5 @@
 from pkg_resources import resource_filename
+import wx
 
 class Resources:
     templatePath = "/input"
@@ -12,15 +13,19 @@ class Resources:
 
     @staticmethod
     def getDSETemplate(version = "1.0"):
-        relativePath = Resources.templatePath + "/" + Resources.getVersion(Resources.dseTemplate, version)
-        filename = resource_filename(__name__, relativePath)
-        return filename
+       return Resources.get_filename(Resources.templatePath + "/" + Resources.getVersion(Resources.dseTemplate, version))
 
     @staticmethod
     def getChecklisteTemplate(version = "1.0"):
-        relativePath = Resources.templatePath + "/" + Resources.getVersion(Resources.checklistTemplate, version)
-        filename = resource_filename(__name__, relativePath)
-        return filename
+        return Resources.get_filename(Resources.templatePath + "/" + Resources.getVersion(Resources.checklistTemplate, version))
+
+    @staticmethod
+    def get_filename(path):
+        try:
+            filename = resource_filename(__name__, path)
+            return filename
+        except(FileNotFoundError):
+            wx.MessageBox("Error occured by determining resource! " + FileNotFoundError.strerror(), caption="Error occured!")
 
     @staticmethod
     def getVersion(filename, version):

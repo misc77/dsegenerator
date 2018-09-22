@@ -11,12 +11,12 @@ class DocGenerator:
     def __init__(self, checklist):
         self.checklistObject = checklist
         self.dseTemplate = {}
-        self.dseDocument = Document()
-        self.parseTemplate(self.checklistObject.xmlVersion)
+        self.dseDocument = None
+        self.processed = False
 
 
     def evaluateFormular(self, text):
-        log = logging.getLogger()
+        log = logger.getLogger()
         startpos = text.index("{")
         if startpos > 0:
             endpos = text.index("}")+1
@@ -58,7 +58,7 @@ class DocGenerator:
 
 
     def parseTemplate(self, version = "1.0"):
-        log = logging.getLogger("DSEGenerator.docGenerator.parseTemplate")
+        log = logger.getLoggerCtx("DSEGenerator.docGenerator.parseTemplate")
         filename = Resources.getDSETemplate(version)
         try:
             tree = ET.parse(filename)   
@@ -68,18 +68,23 @@ class DocGenerator:
         if tree is not None:
             root = tree.getroot()
             if Resources.validVersions(self.checklistObject.xmlVersion, root.attrib.get(const.DSEDOC_ATTRIB_VERSION)):
+                self.dseDocument = Document()
                 core_properties = self.dseDocument.core_properties
                 core_properties.comments = "Checklist Version:" + self.checklistObject.wordVersion + ", Checklist Template Version: " + self.checklistObject.xmlVersion + ", DSE Document Template Version: " + root.attrib.get(const.DSEDOC_ATTRIB_VERSION)
                 for elem in root:
                     if elem.tag == const.DSEDOC_TAG_CHAPTER:
                         self.processChapter(elem)
+                self.processed = True
             else:
                 log.warn("Processing skipped because of invalid versions between Checklist template XML and DSE template XML!! ")
 
 
-    def saveDocument(self, versionnumber=1):
-        log = logging.getLogger("DSEGenerator.docGenerator.saveDocument")
-        filename = Resources.getOutputPath() + "/" + self.checklistObject.created.strftime("%Y%m%d%H%M%S") + "_dseDocument_"+str(versionnumber)+".docx"        
+    def saveDocument(self, versionnumber=1, path=None):
+        log = logger.getLoggerCtx("DSEGenerator.docGenerator.saveDocument")
+        if path is None:
+            filename = Resources.getOutputPath() + "/" + self.checklistObject.created.strftime("%Y%m%d%H%M%S") + "_dseDocument_"+str(versionnumber)+".docx"  
+        else:
+            filename = path      
         try:
             self.dseDocument.save(filename)
         except (PermissionError):
