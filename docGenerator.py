@@ -1,8 +1,7 @@
+import os
 import const
 import logger
-import os
 import xml.etree.ElementTree as ET
-from xmlObject import XMLObject
 from docx import Document
 from resources import Resources
 
@@ -14,8 +13,12 @@ class DocGenerator:
         self.dseDocument = None
         self.processed = False
 
-
     def evaluateFormular(self, text):
+        """evalutate formulars given in Mapping template for DSE Document
+        
+        Arguments:
+            text {[type]} -- [description]
+        """
         log = logger.getLogger()
         startpos = text.index("{")
         if startpos > 0:
@@ -27,13 +30,13 @@ class DocGenerator:
                     text = text.replace(skript, eval(cleanSkript)) 
                     log.info("Evaluated Text: " + text)
                 except (IndexError, OverflowError, SyntaxError, TypeError, NameError):                    
-                        log.warn("Error occured! Skipped evaluation! String to evaluate '" + text + "' will be replaced by ''.")
-                        text = text.replace(skript, "")    
+                    log.warning("Error occured! Skipped evaluation! String to evaluate '" + text + "' will be replaced by ''.")
+                    text = text.replace(skript, "")    
 
                 if text.count("{") > 0:
                     text = self.evaluateFormular(text)
             else:
-                log.warn("Skipped processing! End position of symbol of text to evaluate is before start position (start:" + startpos +", end:" + endpos+")")
+                log.warning("Skipped processing! End position of symbol of text to evaluate is before start position (start:" + startpos +", end:" + endpos+")")
         return text
 
 
@@ -76,26 +79,26 @@ class DocGenerator:
                         self.processChapter(elem)
                 self.processed = True
             else:
-                log.warn("Processing skipped because of invalid versions between Checklist template XML and DSE template XML!! ")
+                log.warning("Processing skipped because of invalid versions between Checklist template XML and DSE template XML!! ")
 
 
     def saveDocument(self, versionnumber=1, path=None):
         log = logger.getLoggerCtx("DSEGenerator.docGenerator.saveDocument")
-        if path is None:
+        if path is None & path:
             filename = Resources.getOutputPath() + "/" + self.checklistObject.created.strftime("%Y%m%d%H%M%S") + "_dseDocument_"+str(versionnumber)+".docx"  
         else:
             filename = path      
         try:
             self.dseDocument.save(filename)
         except (PermissionError):
-            log.warn("File '" + filename + "' could not be written! " + PermissionError.strerror)
+            log.warning("File '" + filename + "' could not be written! " + PermissionError.strerror)
             self.saveDocument(versionnumber+1)
 
         if os.path.isfile(filename):
             log.info("File '" + filename + "' has been written successfully!")
             return True
         else:
-            log.warn("File '" + filename + "' has NOT been written! Please check error log!")
+            log.warning("File '" + filename + "' has NOT been written! Please check error log!")
             return False
 
 

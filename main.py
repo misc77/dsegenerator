@@ -1,7 +1,6 @@
 import configProvider
 import logger
 import wx
-import time
 from apscheduler.schedulers.background import BackgroundScheduler
 from dseGenerator import DSEGenerator
 from docGenerator import DocGenerator
@@ -9,13 +8,19 @@ from checklistParser import parseChecklist
 from resources import Resources
 
 class DSEGeneratorApp(wx.Frame):
-    """[summary]
+    """DSEGeneratorApp
+    Generates DSE Documents based on Checklists in Word format. 
+    To Parse Checklists a specific template in XML format is necessary.
+    Generation of DSE Document is done based on XML Template for mapping
+    Checklist values to text blocks
     
     Arguments:
         wx {[Frame]} -- [description]
     """
     
     def __init__(self, *args, **kwargs):
+        """init function
+        """
         super(DSEGeneratorApp, self).__init__(*args, **kwargs)
         # Read Config for UI
         self.display_log_size = configProvider.getConfigEntryOrDefault('UI Setup', 'DISPLAY_LOG_SIZE', -500)
@@ -25,13 +30,14 @@ class DSEGeneratorApp(wx.Frame):
         self.doc_generator = None
         self.log_scheduler.add_job(self.log_update, 'interval', seconds=10, id='log_job')
         self.log_scheduler.start() 
+        self.view_show_log_item = None
         self.init_ui()    
     
     def init_ui(self):
         """[summary]
            Generates the UI of the Application
         """ 
-        self.SetSize((800,600))
+        self.SetSize((800, 600))
         self.SetTitle("DSEGenerator Application")
         self.Centre()
         self.panel = wx.Panel(self)
@@ -141,7 +147,7 @@ class DSEGeneratorApp(wx.Frame):
                 self.status_text.SetLabelText("Error during processing! Please refer to log for details!")
         else:
             wx.MessageBox("Warning! No file has been selected! Please select a valid file in order to proceed!")
-            log.warn("No file has been selected!")
+            log.warning("No file has been selected!")
     
     def on_generate(self, evt):
         """[summary]
@@ -155,7 +161,7 @@ class DSEGeneratorApp(wx.Frame):
             self.generate_dse_document()
         else:
             wx.MessageBox("Warning! DSE Document can't be generated because of missing or incomplete parsed Checklist Document!", caption="Warning!")
-            log.warn("No checklist has been parsed! Please select a valid checklist document!")
+            log.warning("No checklist has been parsed! Please select a valid checklist document!")
 
     def on_exit(self, evt):
         """[summary]
@@ -201,6 +207,8 @@ class DSEGeneratorApp(wx.Frame):
     #--- End of Event Handler
 
     def hide_log(self):
+        """Hides log view and reduces size of frame
+        """
         self.log_view.Hide()
         self.log_label.Hide()
         self.log_scheduler.pause_job("log_job")
@@ -234,10 +242,10 @@ class DSEGeneratorApp(wx.Frame):
  
 
 def main():
-   app = wx.App()
-   ex = DSEGeneratorApp(None)
-   ex.Show()
-   app.MainLoop()     
+    app = wx.App()
+    ex = DSEGeneratorApp(None)
+    ex.Show()
+    app.MainLoop()     
     
 
 if __name__ == '__main__':
