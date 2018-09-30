@@ -6,6 +6,8 @@ from docx import Document
 from resources import Resources
 
 class DocGenerator:
+    """DocGenerator:
+    """
    
     def __init__(self, checklist):
         self.checklistObject = checklist
@@ -84,7 +86,7 @@ class DocGenerator:
 
     def saveDocument(self, versionnumber=1, path=None):
         log = logger.getLoggerCtx("DSEGenerator.docGenerator.saveDocument")
-        if path is None & path:
+        if path is None or len(path)==0:
             filename = Resources.getOutputPath() + "/" + self.checklistObject.created.strftime("%Y%m%d%H%M%S") + "_dseDocument_"+str(versionnumber)+".docx"  
         else:
             filename = path      
@@ -97,9 +99,9 @@ class DocGenerator:
         if os.path.isfile(filename):
             log.info("File '" + filename + "' has been written successfully!")
             return True
-        else:
-            log.warning("File '" + filename + "' has NOT been written! Please check error log!")
-            return False
+        
+        log.warning("File '" + filename + "' has NOT been written! Please check error log!")
+        return False
 
 
     

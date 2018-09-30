@@ -5,15 +5,29 @@ class Resources:
     templatePath = "/input"
     outputPath = "/output"
     configPath = "/config"
+    graphicsPath = "/gfx"
     logPath = "/log"
     configFile = "config.ini"
+    headerImage = "header.png"
     dseTemplate = "dse_template_v.xml"
     checklistTemplate = "checkliste_template_v.xml"
     logFile = "DSEGenerator.log"
 
     @staticmethod
+    def getHeaderImage():
+        """getHeaderImage: returns filename of Header image
+        """
+        return Resources.get_filename(Resources.graphicsPath + "/" + Resources.headerImage)
+
+    @staticmethod
     def getDSETemplate(version = "1.0"):
-       return Resources.get_filename(Resources.templatePath + "/" + Resources.getVersion(Resources.dseTemplate, version))
+        """getDSETemplate 
+        returns the filename of DSE Template for corresponding version.
+        
+        Keyword Arguments:
+            version {str} -- [description] (default: {"1.0"})
+        """
+        return Resources.get_filename(Resources.templatePath + "/" + Resources.getVersion(Resources.dseTemplate, version))
 
     @staticmethod
     def getChecklisteTemplate(version = "1.0"):

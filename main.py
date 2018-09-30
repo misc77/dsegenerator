@@ -31,47 +31,60 @@ class DSEGeneratorApp(wx.Frame):
         self.log_scheduler.add_job(self.log_update, 'interval', seconds=10, id='log_job')
         self.log_scheduler.start() 
         self.view_show_log_item = None
-        self.init_ui()    
+        self.ui_width = 880
+        self.ui_height_min = 500
+        self.ui_height_max = 700  
+        self.init_ui()   
+        self.SetBackgroundColour("white")       
     
     def init_ui(self):
         """[summary]
            Generates the UI of the Application
         """ 
-        self.SetSize((800, 600))
+        self.SetSize((self.ui_width, self.ui_height_max))
         self.SetTitle("DSEGenerator Application")
         self.Centre()
         self.panel = wx.Panel(self)
         self.sizer = wx.GridBagSizer(3,16)
         self.border = 10
-
         self.line = wx.StaticLine(self.panel, -1, style=wx.LI_VERTICAL)
         self.line.SetSize((100,30))
+        
+        #Header Graphic
+        imageSizer = wx.BoxSizer(wx.HORIZONTAL)
+        headerImage = wx.Image(Resources.getHeaderImage(), wx.BITMAP_TYPE_ANY).ConvertToBitmap()
+        img = wx.StaticBitmap(self.panel, -1, headerImage, (0, 0), (headerImage.GetWidth(), headerImage.GetHeight()))
+        imageSizer.Add(img, flag=wx.LEFT)
+        self.sizer.Add(imageSizer, pos=(0,0), span=(1, 3), flag=wx.TOP|wx.LEFT|wx.RIGHT)
+        
         #Checklist Label
         checklist_label = wx.StaticText(self.panel, label="Checklist Document:")
         font = checklist_label.GetFont()
         font.PointSize += 2
         font = font.Bold()
         checklist_label.SetFont(font)
-        self.sizer.Add(checklist_label, pos=(1,0), flag=wx.LEFT|wx.RIGHT|wx.ALIGN_CENTER_VERTICAL, border=self.border)
+        self.sizer.Add(checklist_label, pos=(2,0), flag=wx.LEFT|wx.RIGHT|wx.ALIGN_CENTER_VERTICAL, border=self.border)
+        
         #FileDialog Button
         file_picker = wx.FilePickerCtrl(self.panel, message="Please select a Checklist Document in *.docx Format:", wildcard="*.docx", style = wx.FLP_USE_TEXTCTRL )
         file_picker.SetTextCtrlGrowable(True)
-        file_picker.SetTextCtrlProportion(20)
-        self.sizer.Add(file_picker, pos=(1,1), span=(1,2), flag=wx.EXPAND|wx.LEFT|wx.RIGHT,border=self.border)
+        file_picker.SetTextCtrlProportion(10)
+        self.sizer.Add(file_picker, pos=(2,1), span=(1,2), flag=wx.EXPAND|wx.LEFT|wx.RIGHT,border=self.border)
+
         #Version of Document selected
         version_label = wx.StaticText(self.panel, label="Checklist Word-Document Version:")
         version_label.SetFont(font)
-        self.sizer.Add(version_label, pos=(2,0), flag=wx.LEFT|wx.RIGHT|wx.ALIGN_CENTER_VERTICAL, border=self.border)
+        self.sizer.Add(version_label, pos=(3,0), flag=wx.LEFT|wx.RIGHT|wx.ALIGN_CENTER_VERTICAL, border=self.border)
         self.version_text = wx.StaticText(self.panel)
         self.version_text.SetFont(font)
-        self.sizer.Add(self.version_text, pos=(2,1),  flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=self.border)
+        self.sizer.Add(self.version_text, pos=(3,1),  flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=self.border)
         version_label_xml = wx.StaticText(self.panel, label="Checklist XMLTemplate Version:")
         version_label_xml.SetFont(font)
-        self.sizer.Add(version_label_xml, pos=(3,0), flag=wx.LEFT|wx.RIGHT|wx.ALIGN_CENTER_VERTICAL, border=self.border)
+        self.sizer.Add(version_label_xml, pos=(4,0), flag=wx.LEFT|wx.RIGHT|wx.ALIGN_CENTER_VERTICAL, border=self.border)
         self.version_text_xml = wx.StaticText(self.panel)
         self.version_text_xml.SetFont(font)
-        self.sizer.Add(self.version_text_xml, pos=(3,1),  flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=self.border)
-        self.sizer.Add(self.line, pos=(5,0), span=(1,3), flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=self.border)
+        self.sizer.Add(self.version_text_xml, pos=(4,1),  flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=self.border)
+        self.sizer.Add(self.line, pos=(6,0), span=(1,3), flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=self.border)
 
         #Status
         status_label = wx.StaticText(self.panel, label="Processing Status:")
@@ -100,7 +113,6 @@ class DSEGeneratorApp(wx.Frame):
         self.sizer.Add(self.log_view, pos=(16,0), span=(3,3), flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=self.border)
 
         self.sizer.AddGrowableCol(2)
-        #sizer.AddGrowableRow(0)
         self.panel.SetSizer(self.sizer)    
 
         self.init_menu()
@@ -134,6 +146,7 @@ class DSEGeneratorApp(wx.Frame):
             e {[type]} -- [description]
         """
         log = logger.getLogger()
+        self.reset()
         if evt.GetPath() != None:
             self.generator.checklistFile = evt.GetPath()
             checklist_doc = parseChecklist(self.generator.checklistFile)
@@ -198,7 +211,8 @@ class DSEGeneratorApp(wx.Frame):
             dlg = wx.FileDialog(self, "Please select destination to save generated document!", ".", "", "Word Document (*.docx)|*.docx", wx.FD_SAVE|wx.FD_OVERWRITE_PROMPT)
             if dlg.ShowModal() == wx.ID_OK:
                 path = dlg.GetPath()
-                self.doc_generator.saveDocument(self.version_text_xml.GetLabelText(), path)
+                if self.doc_generator.saveDocument(self.version_text_xml.GetLabelText(), path):
+                    self.status_text.SetLabelText("Checklist Document saved successfully!")      
             else:
                 wx.MessageBox("Warning! DSE Document hasn't been saved!", caption="Warning!")
         else:
@@ -212,13 +226,15 @@ class DSEGeneratorApp(wx.Frame):
         self.log_view.Hide()
         self.log_label.Hide()
         self.log_scheduler.pause_job("log_job")
-        self.SetSize((800,400)) 
+        self.SetSize((self.ui_width, self.ui_height_min)) 
 
     def show_log(self):
+        """show Logview
+        """
         self.log_view.Show()   
         self.log_label.Show()
         self.log_scheduler.resume_job("log_job")
-        self.SetSize((800,600))
+        self.SetSize((self.ui_width, self.ui_height_max))
 
     def log_update(self):
         """
@@ -239,9 +255,16 @@ class DSEGeneratorApp(wx.Frame):
         self.doc_generator.parseTemplate(self.version_text_xml.GetLabelText())
         self.status_text.SetLabelText("DSE Document successfully processed!")
         self.save_button.Enable()     
- 
+
+    def reset(self):
+        """Reset status of GUI
+        """
+        self.generate_button.Disable()
+        self.save_button.Disable()
 
 def main():
+    """Main Method
+    """
     app = wx.App()
     ex = DSEGeneratorApp(None)
     ex.Show()
