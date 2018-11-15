@@ -28,5 +28,6 @@
 			<adresse zeile="1" spalte="2" wordType="text"></adresse>
 		</adressTabelle>
 		<datenliste zeile="3" spalte="1" wordType="checkboxlist"/> 
+		<anonymisiert zeile="4" spalte="1" wordType="yesnolist"/>
    </host>
 </checkliste>

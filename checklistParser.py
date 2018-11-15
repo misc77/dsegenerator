@@ -18,6 +18,12 @@ def isWordTypeCheckboxlist(child):
     else:
         return False
 
+def isWordTypeYesNolist(child):
+    if child.attrib.get(const.CHECKLIST_ATTRIB_WORDTYPE) == const.CHECKLIST_ATTRIB_WORDTYPE_YESNOLIST:
+        return True
+    else:
+        return False
+
 def readVersion(checklistDocument):
     log = logging.getLogger("DSEGenerator.readVersion")
     try:
@@ -29,6 +35,26 @@ def readVersion(checklistDocument):
     except (IndexError):
         log.error("list index out of range!")
         wx.MessageBox("Can't determine version of selected Document! Processing aborted. Please select another one!", caption="Error occured!")
+
+def parseYesNoList(xmlElement, checklistDocument):
+    log = logging.getLogger("DSEGenerator.parseYesNoList")
+    checkboxStatelist = []
+    element = checklistDocument._element.xml
+    elementliste = element.split("<")
+    log.debug("doc: " + str(checklistDocument.text))
+    for e in elementliste:
+        log.debug("element: " + str(e))
+        if e.startswith("w14:checked "):
+            e = e.split('"')[1]
+            if e == "1" : 
+                checkboxStatelist.append(True)
+            else:
+                checkboxStatelist.append(False)
+    if checkboxStatelist is not None and checkboxStatelist[0] is True:
+        return "True"
+    else:
+        return "False"
+
 
 def parseCheckboxlist(xmlElement, checklistDocument):
     log = logging.getLogger("DSEGenerator.parseCheckboxlist")
@@ -73,6 +99,8 @@ def parseTable(xmlElement, checklistDocument):
             tableObject[child.tag] = parseTable(child, table.cell(zeile,spalte))
         elif isWordTypeCheckboxlist(child):
             tableObject[child.tag] = parseCheckboxlist(child, table.cell(zeile,spalte))
+        elif isWordTypeYesNolist(child):
+            tableObject[child.tag] = parseYesNoList(child, table.cell(zeile,spalte))
         else:
             tableObject[child.tag] = table.cell(zeile,spalte).text      
 
