@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <DSEDokument version="1.0">
     <Kapitel titel="" kommentar="Einleitung">
-        <Abschnitt titel="Datenschutzerklärung">Der Schutz Ihrer personenbezogenen Daten ist uns sehr wichtig. Damit sämtliche Datenverarbeitungsvorgänge auf unserer Webseite und in unseren Angeboten für Sie als Besucher und Nutzer (nachfolgend „Nutzer“ genannt) unserer Webseite transparent und nachvollziehbar sind, klären wir Sie in dieser Datenschutzerklärung über die Art, den Umfang und den Zweck der Verarbeitung Ihrer personenbezogenen Daten auf unserer Webseite auf. 
-        Sie können sich die Datenschutzerklärung speichern oder ausdrucken, indem Sie entweder in Ihrem Browser die Befehle „drucken“ oder „Seite speichern unter“ wählen oder die hier hinterlegte pdf-Version drucken oder speichern. Um die pdf-Version öffnen zu können, benötigen Sie ein spezielles Programm für pdf-Dateien (z. B. Adobe Reader).
+        <Abschnitt titel="Datenschutzerklärung"><Text>Der Schutz Ihrer personenbezogenen Daten ist uns sehr wichtig. Damit sämtliche Datenverarbeitungsvorgänge auf unserer Webseite und in unseren Angeboten für Sie als Besucher und Nutzer (nachfolgend „Nutzer“ genannt) unserer Webseite transparent und nachvollziehbar sind, klären wir Sie in dieser Datenschutzerklärung über die Art, den Umfang und den Zweck der Verarbeitung Ihrer personenbezogenen Daten auf unserer Webseite auf. 
+        Sie können sich die Datenschutzerklärung speichern oder ausdrucken, indem Sie entweder in Ihrem Browser die Befehle „drucken“ oder „Seite speichern unter“ wählen oder die hier hinterlegte pdf-Version drucken oder speichern. Um die pdf-Version öffnen zu können, benötigen Sie ein spezielles Programm für pdf-Dateien (z. B. Adobe Reader).</Text>
         </Abschnitt>
-        <Abschnitt titel="Erläuterung der Begriffe">Nachfolgend erläutern wir die Begriffe gemäß Art. 4 EU-Datenschutz-Grundverordnung (nachfolgend “DSGVO” genannt), die in der Datenschutzerklärung genannt werden:
+        <Abschnitt titel="Erläuterung der Begriffe"><Text>Nachfolgend erläutern wir die Begriffe gemäß Art. 4 EU-Datenschutz-Grundverordnung (nachfolgend “DSGVO” genannt), die in der Datenschutzerklärung genannt werden:
 
 •	„Personenbezogene Daten“ (nachfolgend „Daten“ genannt) sind alle Informationen, die sich auf eine identifizierte oder identifizierbare natürliche Person (im Folgenden „betroffene Person“ oder „Betroffener“) beziehen; eine Person ist identifizierbar, wenn sie direkt oder indirekt, insbesondere mittels Zuordnung zu bestimmten Kennungen oder Merkmalen identifiziert werden kann. Personenbezogene Daten sind daher z. B. Namen, Anschriften, E-Mail-Adresse, Berufsbezeichnung, Geburtsdatum, Telefonnummer, Nutzerverhalten, IP-Adresse, Standortdaten, genetische Daten, Gesundheitsdaten etc.
 •	„Verarbeitung“ ist jeder Vorgang in Bezug auf personenbezogene Daten, z. B. das Erheben, Erfassen, Organisieren, Ordnen, Speichern, Anpassen, Verändern, Auslesen, Abfragen, Verwenden, Offenlegen, Übermitteln, Verbreiten, Bereitstellen, Abgleichen, Verknüpfen, Einschränken, Löschen oder Vernichten von personenbezogenen Daten. 
@@ -14,11 +14,11 @@
 •	„Auftragsverarbeiter“ ist eine natürliche Person, Unternehmen, Verein, Behörde, Einrichtung oder andere Stelle, die personenbezogene Daten im Auftrag des Verantwortlichen verarbeitet. 
 •	„Empfänger“ ist eine natürliche Person, Unternehmen, Verein, Behörde, Einrichtung oder andere Stelle, dem personenbezogene Daten offengelegt werden, unabhängig davon, ob es sich bei ihm um einen Dritten handelt oder nicht.  
 •	„Dritter“ ist eine natürliche Person, Unternehmen, Verein, Behörde, Einrichtung oder andere Stelle, außer dem Betroffenen, dem Verantwortlichen, dem Auftragsverarbeiter und den Personen, die unter der unmittelbaren Verantwortung des Verantwortlichen oder des Auftragsverarbeiters befugt sind, die personenbezogenen Daten zu verarbeiten;
-•	„Einwilligung“ der betroffenen Person ist jede freiwillige, in informierter Weise und unmissverständlich abgegebene Erklärung oder sonstige eindeutige bestätigende Handlung, mit der der Betroffene zu verstehen gibt, dass er im konkreten Fall mit der Verarbeitung der ihn betreffenden personenbezogenen Daten einverstanden ist.
+•	„Einwilligung“ der betroffenen Person ist jede freiwillige, in informierter Weise und unmissverständlich abgegebene Erklärung oder sonstige eindeutige bestätigende Handlung, mit der der Betroffene zu verstehen gibt, dass er im konkreten Fall mit der Verarbeitung der ihn betreffenden personenbezogenen Daten einverstanden ist.</Text>
         </Abschnitt>
     </Kapitel>
     <Kapitel titel="Allgemeine Angaben">
-        <Abschnitt titel="Verantwortlicher">Verantwortlicher für die Verarbeitung personenbezogener Daten auf dieser Webseite ist:
+        <Abschnitt titel="Verantwortlicher"><Text>Verantwortlicher für die Verarbeitung personenbezogener Daten auf dieser Webseite ist:
 Firmenname:     {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[0]}
 Straße:         {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[1]}
 PLZ, Ort:       {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[2]}
@@ -27,30 +27,38 @@ Tel:            {self.checklistObject.elementList["verantwortlicher"]["adressTab
 Fax:            {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[5]}
 Email:          {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[6]}
 Webseite:       {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[7]}
-Link Impressum: {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[8]}
+Link Impressum: {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[8]}</Text>
         </Abschnitt>
-        <Abschnitt titel="Datenschutzanfragen">Sämtliche Anfragen zur Verarbeitung Ihrer personenbezogenen Daten oder die Ausübung Ihrer im Folgenden genannten Rechte richten Sie bitte per E-Mail, Fax oder Post an folgende Adresse:
+        <Abschnitt titel="Datenschutzanfragen"><Text>Sämtliche Anfragen zur Verarbeitung Ihrer personenbezogenen Daten oder die Ausübung Ihrer im Folgenden genannten Rechte richten Sie bitte per E-Mail, Fax oder Post an folgende Adresse:
 Firmenname: {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[0]}
 Straße:     {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[1]}
 PLZ, Ort:   {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[2]}
 Land:       {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[3]}
 Tel:        {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[4]}
 Fax:        {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[5]}
-Email:      {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[6]}
+Email:      {self.checklistObject.elementList["verantwortlicher"]["adressTabelle"]["adresse"].split("\n")[6]}</Text>
         </Abschnitt>
         <Abschnitt titel="Datenschutzbeauftragter">
-Die Kontaktdaten unseres Datenschutzbeauftragten sind:
+<Text>Die Kontaktdaten unseres Datenschutzbeauftragten sind:
 Vorname, Nachname: {["dsb"]["adressTabelle"]["adresse"].split("\n")[0]}
 Firmenname: {self.checklistObject.elementList["dsb"]["adressTabelle"]["adresse"].split("\n")[2]}
 Straße:     {self.checklistObject.elementList["dsb"]["adressTabelle"]["adresse"].split("\n")[3]}
 PLZ, Ort:   {self.checklistObject.elementList["dsb"]["adressTabelle"]["adresse"].split("\n")[4]}
 Land:       {self.checklistObject.elementList["dsb"]["adressTabelle"]["adresse"].split("\n")[5]}
-Tel:        {self.checklistObject.elementList["dsb"]["adressTabelle"]["adresse"].split("\n")[6]}
+Tel:        {self.checklistObject.elementList["dsb"]["adressTabelle"]["adresse"].split("\n")[6]}</Text>
         </Abschnitt>
     </Kapitel>
     <Kapitel titel="Allgemeine Hinweise zur Verarbeitung personenbezogener Daten">
         <Abschnitt titel="Arten der verarbeiteten Daten">
-Wir erheben und verarbeiten auf unserer Webseite {self.checklistObject.getKeyList("host","datenliste")}
+<Text>Wir erheben und verarbeiten auf unserer Webseite {self.checklistObject.getKeyList("host","datenliste")}</Text>
+        </Abschnitt>
+        <Abschnitt titel="Kategorien betroffener Personen">
+<Text>Die von der Verarbeitung personenbezogener Daten Betroffenen sind alle Besucher und Nutzer unserer Webseite.</Text>
+        </Abschnitt>
+        <Abschnitt titel="Zweck der Verarbeitung">
+<Text>Wir erheben und verarbeiten die personenbezogenen Daten der Nutzer unserer Webseite, </Text>
+<Text cond="self.compareElementValue(self.checklistObject.elementList['host']['datenliste'], 'Kontaktdaten', True)">um mit Ihnen zu kommunizieren und sie zu informieren (z. B. Kontakt- und sonstige Anfragen, Newsletter),</Text>        
         </Abschnitt>
     </Kapitel>
+    
 </DSEDokument>

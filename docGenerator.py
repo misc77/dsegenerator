@@ -15,6 +15,39 @@ class DocGenerator:
         self.dseDocument = None
         self.processed = False
 
+    def containsElement(self, array, element):
+        for item in array:
+            print("find " + element + " in " + item)
+            if item.find(element) == -1:                
+                continue
+            else:
+                print("element " + element + " found!")
+                return True
+        return False
+
+    def compareElementValue(self, dictionary, element, value):
+        if element in dictionary:
+            if dictionary[element] == value:
+                return True
+        return False 
+
+    def evaluateCondition(self, text):
+        """evalutate conditions given in Mapping template for DSE Document
+        
+        Arguments:
+            text {[type]} -- [description]
+        """
+        log = logger.getLogger()
+        condition = False
+        log.debug("condition: " + text)
+        if text != "":
+            try:
+                condition = eval(text)
+                log.debug("condition = " + str(condition))
+            except Exception (IndexError, OverflowError, SyntaxError, TypeError, NameError):                    
+                log.warning("Error occured! Skipped evaluation! Condition to evaluate '" + text + "' will return False." )
+        return condition
+
     def evaluateFormular(self, text):
         """evalutate formulars given in Mapping template for DSE Document
         
@@ -22,7 +55,10 @@ class DocGenerator:
             text {[type]} -- [description]
         """
         log = logger.getLogger()
-        startpos = text.index("{")
+        try:
+            startpos = text.index("{")
+        except(ValueError):
+            return text
         if startpos > 0:
             endpos = text.index("}")+1
             if endpos > startpos:
@@ -42,15 +78,32 @@ class DocGenerator:
         return text
 
 
+    def processText(self, text_elem):
+        cond = ""
+        text = text_elem.text
+        cond = text_elem.attrib.get(const.DSEDOC_ATTRIB_COND)
+        if cond != "" and cond != None:
+            print("cond: " + str(cond))
+            condition = self.evaluateCondition(cond)
+            if condition is True:
+                text = self.evaluateFormular(text)
+            else:
+                text = ""
+        else:
+            text = self.evaluateFormular(text)
+        return text
+
+
     def processParagraph(self, paragraph):
         titel = paragraph.attrib.get(const.DSEDOC_ATTRIB_TITLE)
         if titel != "":
             self.dseDocument.add_heading(titel, level=3)
         text = paragraph.text
         if text != "":
-            if text.count("{") > 0:    
-                text = self.evaluateFormular(text)                
-            self.dseDocument.add_paragraph(text)
+            for elem in paragraph:
+                if elem.tag == const.DSEDOC_TAG_TEXT:
+                    text = self.processText(elem)                
+                    self.dseDocument.add_paragraph(text)
 
 
     def processChapter(self, chapter):
