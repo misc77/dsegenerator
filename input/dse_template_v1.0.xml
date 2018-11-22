@@ -58,7 +58,38 @@ Tel:        {self.checklistObject.elementList["dsb"]["adressTabelle"]["adresse"]
         <Abschnitt titel="Zweck der Verarbeitung">
 <Text>Wir erheben und verarbeiten die personenbezogenen Daten der Nutzer unserer Webseite, </Text>
 <Text cond="self.compareElementValue(self.checklistObject.elementList['host']['datenliste'], 'Kontaktdaten', True)">um mit Ihnen zu kommunizieren und sie zu informieren (z. B. Kontakt- und sonstige Anfragen, Newsletter),</Text>        
+<Text cond="self.compareElementValue(self.checklistObject.elementList['host']['datenliste'], 'Nutzungsdaten', True, False) and self.compareElementValue(self.checklistObject.elementList['host']['datenliste'], 'Meta- und Kommunikationsdaten von Kunden', True, False)">um Statistiken, Reichweitenmessung und Analysen durchzuführen (z. B. mit Marketing- und Analysetools),</Text>
+<Text>damit wir Inhalte und Funktionen besser gestalten und optimieren können, um die Webseite technisch zu verwalten, zu optimieren und Sicherheitslücken zu schließen.</Text>        
         </Abschnitt>
+        <Abschnitt titel="Rechtsgrundlagen für die Verarbeitung personenbezogener Daten">
+<Text>Wir verarbeiten personenbezogene Daten nur, wenn wir aufgrund einer Rechtsgrundlage hierzu berechtigt sind. Im Folgenden werden wir diese Rechtsgrundlagen einzeln benennen. Ansonsten sind wir immer dann berechtigt personenbezogene Daten zu verarbeiten, wenn der Betroffene eingewilligt hat (s. Art. 6 Abs. 1 lit. a, Art. 7 DSGVO), wenn wir verpflichtet sind, vertragliche oder vorvertragliche Pflichten zu erfüllen (s. Art. 6 Abs. 1 lit. b DSGVO), wenn wir rechtliche Verpflichtungen erfüllen müssen (s. Art. 6 Abs. 1 lit. c DSGVO), wenn wir lebenswichtige Interessen eines Betroffenen oder einer anderen natürlichen Person erfüllen müssen (s. Art. 6 Abs. 1 lit. d DSGVO), wenn wir Aufgaben wahrnehmen, die im öffentlichen Interesse oder in Ausübung öffentlicher Gewalt liegen (s. Art. 6 Abs. 1 lit. e DSGVO) oder wenn wir unsere berechtigten Interessen wahren (s. Art. 6 Abs. 1 lit. f DSGVO).</Text>
+        </Abschnitt>
+        <Abschnitt titel="Empfänger von personenbezogenen Daten">
+<Text>Wir übermitteln personenbezogene Daten teilweise an Auftragsverarbeiter oder andere Dritte (z. B. Zahlungsdienstleister, Hostingagenturen, Newsletterdienste, Versandunternehmen etc.), mit denen wir zusammen arbeiten. Hierzu sind wir berechtigt, wenn der Betroffene hierin eingewilligt hat (s. Art. 6 Abs. 1 lit. a, Art. 7 DSGVO), wenn wir damit vertragliche oder vorvertragliche Pflichten erfüllen (s. Art. Art. 6 Abs. 1 lit. b DSGVO), wenn wir damit eine rechtliche Verpflichtung erfüllen (s. Art. 6 Abs. 1 lit. c DSGVO), wenn wir lebenswichtige Interessen eines Betroffenen oder einer anderen natürlichen Person erfüllen müssen (s. Art. 6 Abs. 1 lit. d DSGVO), wenn wir Aufgaben wahrnehmen, die im öffentlichen Interesse oder in Ausübung öffentlicher Gewalt liegen (s. Art. 6 Abs. 1 lit. e DSGVO) oder wenn wir unsere berechtigten Interessen wahren (s. Art. 6 Abs. 1 lit. f DSGVO). Mit Auftragsverarbeitern schließen wir eine sog. Auftragsverarbeitungsvereinbarung gemäß Art. 28 DSGVO, wonach sich diese ebenfalls zur Einhaltung des Datenschutzes verpflichten.</Text>
+        </Abschnitt>
+        <Abschnitt titel="Verarbeitung von personenbezogenen Daten in Drittländern">
+<Text>Sofern Daten von uns in ein Drittland übermittelt werden, weil wir dort z. B. Dienstleister beauftragen, sind wir hierzu berechtigt, wenn der Betroffene hierin eingewilligt hat (s. Art. 6 Abs. 1 lit. a, Art. 7 DSGVO), wenn wir damit vertragliche oder vorvertragliche Pflichten erfüllen (s. Art. Art. 6 Abs. 1 lit. b DSGVO), wenn wir damit eine rechtliche Verpflichtung erfüllen (s. Art. 6 Abs. 1 lit. c DSGVO), wenn wir lebenswichtige Interessen eines Betroffenen oder einer anderen natürlichen Person erfüllen müssen (s. Art. 6 Abs. 1 lit. d DSGVO), wenn wir Aufgaben wahrnehmen, die im öffentlichen Interesse oder in Ausübung öffentlicher Gewalt liegen (s. Art. 6 Abs. 1 lit. e DSGVO) oder wenn wir unsere berechtigten Interessen wahren (s. Art. 6 Abs. 1 lit. f DSGVO). Als Drittland gilt jedes Land außerhalb der Europäischen Union (EU) oder des Europäischen Wirtschaftsraums (EWR). Bei der Übermittlung von Daten in Drittländer achten wir auf die Einhaltung der Art. 44 ff. DSGVO, auf bestehende Garantien oder Feststellungen der EU über ein angemessenes  Datenschutzniveau im Drittland, sowie auf den Abschluss ggfs. erforderlicher Vereinbarungen, z. B. Standardvertragsklauseln.</Text>
+        </Abschnitt>
+        <Abschnitt titel="Kontaktaufnahme">
+<Text>Bei Ihrer Kontaktaufnahme mit uns per E-Mail, Fax, Telefon oder Post werden die von Ihnen mitgeteilten Daten (z. B. E-Mail-Adresse, Name, Telefonnummer, Faxnummer, Adresse) von uns verarbeitet, um Ihre Anfragen zu beantworten. Hierzu sind wir gemäß Art. 6 Abs. 1 lit. b DSGVO berechtigt. Die Daten der Nutzer können zudem in einem Customer-Relationship-Management System ("CRM System") oder in vergleichbaren Datenbanken gespeichert werden.
+Wir löschen sämtliche Daten, nachdem die Speicherung nicht mehr erforderlich ist, oder schränken die Verarbeitung ein, falls gesetzliche Aufbewahrungspflichten bestehen. Die Erforderlichkeit der Aufbewahrung der Daten wird spätestens alle zwei Jahre überprüft.</Text>
+        </Abschnitt>
+        <Abschnitt titel="Kontakt-/Rückrufformular">
+<Text>Bei Ihrer Kontaktaufnahme mit uns mittels unseres Kontakt-/Rückrufformulars werden die von Ihnen mitgeteilten Daten (z. B. E-Mail-Adresse, Name, Telefonnummer, Faxnummer, Adresse) von uns verarbeitet, um Ihre Anfragen zu beantworten. Hierzu sind wir gemäß Art. 6 Abs. 1 lit. b, f DSGVO berechtigt. Die Daten der Nutzer können zudem in einem Customer-Relationship-Management System ("CRM System") oder in vergleichbaren Datenbanken gespeichert werden.
+
+Die Mindestdaten, die Sie uns übermitteln müssen, damit wir Ihre Anfragen bearbeiten können, ergeben sich als Pflichtfelder aus dem Formular. Weitere Daten können Sie optional übermitteln.
+Die Übermittlung Ihrer Daten erfolgt verschlüsselt nach dem Stand der Technik.
+
+Wir löschen sämtliche Daten, nachdem die Speicherung nicht mehr erforderlich ist, oder schränken die Verarbeitung ein, falls gesetzliche Aufbewahrungspflichten bestehen. Die Erforderlichkeit der Aufbewahrung der Daten wird spätestens alle zwei Jahre überprüft.</Text>
+        </Abschnitt>
+        <Abschnitt titel="Löschung/Sperrung Ihrer personenbezogenen Daten">
+<Text>Wir speichern Ihre personenbezogenen Daten nur so lange, wie dies zur Erreichung der hier genannten Zwecke erforderlich ist. Darüber hinaus speichern wir Ihre Daten nur, wenn gesetzliche Aufbewahrungspflichten dies erfordern (z. B. 6 Jahre gemäß § 257 Abs. 1 HGB und 10 Jahre gemäß § 147 Abs. 1 AO für Handels- und Geschäftsbriefe, Rechnungen, Angebote etc.). Nach Fortfall des jeweiligen Zweckes bzw. Ablauf dieser Fristen werden die Daten entsprechend den gesetzlichen Vorschriften gesperrt oder gelöscht gemäß Art. 17, 18 DSGVO.</Text>
+        </Abschnitt>
+        <Abschnitt titel="Erhebung von Zugriffsdaten und Webserver-Logfiles">
+<Text>Wir erheben auf Grundlage unserer berechtigten Interessen an der Analyse, Optimierung und dem wirtschaftlichen Betrieb unserer Webseite gemäß Art. 6 Abs. 1 lit. f DSGVO über jeden Zugriff auf unsere Webseite (sog. Webserver-Logfiles) die nachfolgenden Daten:
+{self.checklistObject.getKeyList("host","zweck")}</Text>
+        </Abschnitt>
+
     </Kapitel>
     
 </DSEDokument>

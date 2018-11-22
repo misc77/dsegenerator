@@ -55,7 +55,6 @@ def parseYesNoList(xmlElement, checklistDocument):
     else:
         return "False"
 
-
 def parseCheckboxlist(xmlElement, checklistDocument):
     log = logging.getLogger("DSEGenerator.parseCheckboxlist")
     checkboxStatelist = []

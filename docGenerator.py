@@ -1,7 +1,13 @@
+"""Generates DSE Document based on dse Template information
+
+Returns:
+    [type] -- [description]
+"""
 import os
+import xml.etree.ElementTree as ET
 import const
 import logger
-import xml.etree.ElementTree as ET
+
 from docx import Document
 from resources import Resources
 
@@ -16,6 +22,15 @@ class DocGenerator:
         self.processed = False
 
     def containsElement(self, array, element):
+        """[summary]Checks for element in list
+        
+        Arguments:
+            array {[type]} -- [description]
+            element {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         for item in array:
             print("find " + element + " in " + item)
             if item.find(element) == -1:                
@@ -25,10 +40,28 @@ class DocGenerator:
                 return True
         return False
 
-    def compareElementValue(self, dictionary, element, value):
-        if element in dictionary:
-            if dictionary[element] == value:
-                return True
+    def compareElementValue(self, dictionary, element, value, exact_match = True):
+        """Compares value of element in Dictionary structure
+        
+        Arguments:
+            dictionary {[type]} -- [description]
+            element {[type]} -- [description]
+            value {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """        
+        if exact_match:
+            if element in dictionary:
+                return dictionary[element] == value
+        if not exact_match:
+            for item in dictionary.keys():
+                if item.find(element) == -1:
+                    continue
+                else:
+                    print("key found " + item + " -> " + element)
+                    print("dict element = " + str(dictionary[element]) + " test for " + str(value))
+                    return dictionary[element] == value
         return False 
 
     def evaluateCondition(self, text):
