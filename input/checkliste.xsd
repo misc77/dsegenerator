@@ -69,6 +69,7 @@
 						<xs:attribute name="spalte" type="xs:integer" fixed="1"/>
 					</xs:element>
 					<xs:element name="adresse" ref="adressTabelle" />
+					<xs:element name="tabelle" ref="tabelle"/>
 				</xs:complexType>
 			</xs:element>
 			<!--<xs:element name="externerHost" ref="externerHostTabelle"/>

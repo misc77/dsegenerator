@@ -24,6 +24,13 @@ def isWordTypeYesNolist(child):
     else:
         return False
 
+def isWordTypeDynamicTable(child):
+    if child.attrib.get(const.CHECKLIST_ATTRIB_WORDTYPE) == const.CHECKLIST_ATTRIB_WORDTYPE_DYNAMICTABLE:
+        return True
+    else:
+        return False
+
+
 def readVersion(checklistDocument):
     log = logging.getLogger("DSEGenerator.readVersion")
     try:
@@ -87,6 +94,20 @@ def parseCheckboxlist(xmlElement, checklistDocument):
     log.debug("returning values: " + str(values))
     return values
 
+def parseDynamictable(xmlElement, checklistDocument):
+    log = logging.getLogger("DSEGenerator.parseDynamictable")
+    values = {}
+    i = 0    
+    element = checklistDocument._element.xml
+    elementliste = element.split("<")
+    for tr in elementliste:
+        if tr.startswith("w:tr"):
+            for t in tr.split("<"):
+                if t.startswith("w:t"):
+                    print("element t: " + t)
+    return values
+
+
 def parseTable(xmlElement, checklistDocument):
     pos = int(xmlElement.attrib.get(const.CHECKLIST_ATTRIB_TAB))
     table = checklistDocument.tables[pos-1]
@@ -100,6 +121,8 @@ def parseTable(xmlElement, checklistDocument):
             tableObject[child.tag] = parseCheckboxlist(child, table.cell(zeile,spalte))
         elif isWordTypeYesNolist(child):
             tableObject[child.tag] = parseYesNoList(child, table.cell(zeile,spalte))
+        elif isWordTypeDynamicTable(child):
+            tableObject[child.tag] = parseDynamictable(child, table.cell(zeile,spalte))
         else:
             tableObject[child.tag] = table.cell(zeile,spalte).text      
 
@@ -117,11 +140,11 @@ def parseChecklist(checklistFile):
     if checklistDocument is not None:
         version = readVersion(checklistDocument)
         checklistTemplate = Resources.getChecklisteTemplate(version)
-
+        print("version" + version)
         try:
             tree = ET.parse(checklistTemplate) 
-        except (ET.ParseError):
-            log.error("Checklist Template '" + checklistTemplate + "' could not be read!")
+        except Exception as e:
+            log.error("Checklist Template '" + checklistTemplate + "' could not be read! " + str(e))
             tree = None
             checklistObject = None
         except (FileNotFoundError):

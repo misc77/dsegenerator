@@ -54,14 +54,14 @@ class DocGenerator:
         if exact_match:
             if element in dictionary:
                 return dictionary[element] == value
-        if not exact_match:
+        else:
             for item in dictionary.keys():
                 if item.find(element) == -1:
                     continue
                 else:
                     print("key found " + item + " -> " + element)
-                    print("dict element = " + str(dictionary[element]) + " test for " + str(value))
-                    return dictionary[element] == value
+                    print("dict element = " + str(dictionary[item]) + " test for " + str(value))
+                    return (dictionary[item] == value)
         return False 
 
     def evaluateCondition(self, text):

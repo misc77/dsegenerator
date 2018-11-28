@@ -31,16 +31,16 @@
 		<anonymisiert zeile="4" spalte="1" wordType="yesnolist"/>
 		<avv zeile="5" spalte="1" wordType="yesnolist"/>
 		<zweck zeile="6" spalte="1" wordType="checkboxlist"/>
-		<land zeile="7" spalte="1" wordType="text"/> <!-- todo: PARSING TEXT IN TEXT -->
+		<land zeile="7" spalte="1" wordType="text"/> 
    </host>
    <geschaeftsgegenstand wordType="table" tabelle="5">
 		<inhalt zeile="1" spalte="1" wordType="checkboxlist"/>
    </geschaeftsgegenstand>
    <zugriffsdaten wordType="table" tabelle="6">
-		<inhalt zeile="1" spalte="1" wordType="checkboxlist">
+		<inhalt zeile="1" spalte="1" wordType="checkboxlist"/>
 		<anonymisiert zeile="2" spalte="1" wordType="yesnolist"/>
 		<nutzerdaten zeile="3" spalte="1" wordType="yesnolist"/>
 		<zweck zeile="4" spalte="1" wordType="checkboxlist"/>
-		<dauer zeile="5" spalte="1" wordType="text"/> <!-- todo: PARSING TEXT IN TEXT -->
+		<dauer zeile="5" spalte="1" wordType="text"/> 
    </zugriffsdaten>
 </checkliste>
