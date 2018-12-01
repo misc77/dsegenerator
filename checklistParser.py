@@ -7,29 +7,19 @@ import logging
 import wx
 
 def isWordTypeTable(child):
-    if child.attrib.get(const.CHECKLIST_ATTRIB_WORDTYPE) == const.CHECKLIST_ATTRIB_WORDTYPE_TABLE:
-        return True
-    else:
-        return False
+    return (child.attrib.get(const.CHECKLIST_ATTRIB_WORDTYPE) == const.CHECKLIST_ATTRIB_WORDTYPE_TABLE)
 
 def isWordTypeCheckboxlist(child):
-    if child.attrib.get(const.CHECKLIST_ATTRIB_WORDTYPE) == const.CHECKLIST_ATTRIB_WORDTYPE_CHECKBOXLIST:
-        return True
-    else:
-        return False
+    return (child.attrib.get(const.CHECKLIST_ATTRIB_WORDTYPE) == const.CHECKLIST_ATTRIB_WORDTYPE_CHECKBOXLIST)
 
 def isWordTypeYesNolist(child):
-    if child.attrib.get(const.CHECKLIST_ATTRIB_WORDTYPE) == const.CHECKLIST_ATTRIB_WORDTYPE_YESNOLIST:
-        return True
-    else:
-        return False
+    return (child.attrib.get(const.CHECKLIST_ATTRIB_WORDTYPE) == const.CHECKLIST_ATTRIB_WORDTYPE_YESNOLIST)
 
 def isWordTypeDynamicTable(child):
-    if child.attrib.get(const.CHECKLIST_ATTRIB_WORDTYPE) == const.CHECKLIST_ATTRIB_WORDTYPE_DYNAMICTABLE:
-        return True
-    else:
-        return False
+    return (child.attrib.get(const.CHECKLIST_ATTRIB_WORDTYPE) == const.CHECKLIST_ATTRIB_WORDTYPE_DYNAMICTABLE)
 
+def isWordTypeTextInput(child):
+    return (child.attrib.get(const.CHECKLIST_ATTRIB_WORDTYPE) == const.CHECKLIST_ATTRIB_WORDTYPE_TEXTINPUT)
 
 def readVersion(checklistDocument):
     log = logging.getLogger("DSEGenerator.readVersion")
@@ -43,6 +33,19 @@ def readVersion(checklistDocument):
         log.error("list index out of range!")
         wx.MessageBox("Can't determine version of selected Document! Processing aborted. Please select another one!", caption="Error occured!")
 
+def getTagContent(tag):
+    text = ""
+    text = tag.split(">")[0].split("<")[0]
+    print("getTagContent: " + text)
+    return text
+
+def parseTextInput(xmlElement, checklistDocument):
+    log = logging.getLogger("DSEGenerator.parseTextInput")
+    element = ET.ElementTree(ET.fromstring(checklistDocument._element.xml))
+    namespaces = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
+    e = element.find("w:sdt/w:sdtContent/w:p/w:r/w:t", namespaces)
+    return e.text    
+
 def parseYesNoList(xmlElement, checklistDocument):
     log = logging.getLogger("DSEGenerator.parseYesNoList")
     checkboxStatelist = []
@@ -50,7 +53,6 @@ def parseYesNoList(xmlElement, checklistDocument):
     elementliste = element.split("<")
     log.debug("doc: " + str(checklistDocument.text))
     for e in elementliste:
-        log.debug("element: " + str(e))
         if e.startswith("w14:checked "):
             e = e.split('"')[1]
             if e == "1" : 
@@ -123,6 +125,12 @@ def parseTable(xmlElement, checklistDocument):
             tableObject[child.tag] = parseYesNoList(child, table.cell(zeile,spalte))
         elif isWordTypeDynamicTable(child):
             tableObject[child.tag] = parseDynamictable(child, table.cell(zeile,spalte))
+        elif isWordTypeTextInput(child):
+            print("tabelle: " + str(pos)) 
+            print("zeile: " + str(zeile))
+            print("spalte: " + str(spalte))
+            print("doc element: " + str(table.cell(zeile, spalte)._element.xml))
+            tableObject[child.tag] = parseTextInput(child, table.cell(zeile, spalte))
         else:
             tableObject[child.tag] = table.cell(zeile,spalte).text      
 

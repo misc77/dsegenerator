@@ -1,9 +1,19 @@
 import unittest
+"""unittest
+"""
 
 class TestConfigProvider(unittest.TestCase):
+    """TestConfigProvider
+    
+    Arguments:
+        unittest {[type]} -- [description]
+    """
 
     def test_foo(self):
-        self.assetTrue(True)
+        """test_foo
+        """
+        self.assertTrue(1==1)
 
 if __name__ == '__main__':
     unittest.main()
+    

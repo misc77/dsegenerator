@@ -87,8 +87,9 @@ Wir löschen sämtliche Daten, nachdem die Speicherung nicht mehr erforderlich i
         </Abschnitt>
         <Abschnitt titel="Erhebung von Zugriffsdaten und Webserver-Logfiles">
 <Text>Wir erheben auf Grundlage unserer berechtigten Interessen an der Analyse, Optimierung und dem wirtschaftlichen Betrieb unserer Webseite gemäß Art. 6 Abs. 1 lit. f DSGVO über jeden Zugriff auf unsere Webseite (sog. Webserver-Logfiles) die nachfolgenden Daten:
-{self.checklistObject.getKeyList("host","zweck")}</Text>
-        </Abschnitt>
+{self.formatList(self.checklistObject.getKeyList("host","zweck"))}</Text>
+<Text>Die Daten werden für statistische Auswertungen zum Zweck des Betriebs, der Sicherheit und der Optimierung der Webseite verwendet. Die Daten werden aus Sicherheitsgründen (z. B. für die Aufklärung von Betrugs-/Missbrauchsfällen) kurzfristig/für die Dauer von ………………. gespeichert. Die IP-Adresse wird ausschließlich anonymisiert gespeichert. Ist eine längere Aufbewahrung zu Beweiszwecken erforderlich, werden diese nach der endgültigen Klärung der Angelegenheit gelöscht.</Text>
+</Abschnitt>
 
     </Kapitel>
     

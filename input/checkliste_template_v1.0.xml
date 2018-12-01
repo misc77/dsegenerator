@@ -37,10 +37,11 @@
 		<inhalt zeile="1" spalte="1" wordType="checkboxlist"/>
    </geschaeftsgegenstand>
    <zugriffsdaten wordType="table" tabelle="6">
-		<inhalt zeile="1" spalte="1" wordType="checkboxlist"/>
-		<anonymisiert zeile="2" spalte="1" wordType="yesnolist"/>
-		<nutzerdaten zeile="3" spalte="1" wordType="yesnolist"/>
-		<zweck zeile="4" spalte="1" wordType="checkboxlist"/>
-		<dauer zeile="5" spalte="1" wordType="text"/> 
+  		<titel zeile="1" spalte="1" wordType="text"/>
+		<inhalt zeile="2" spalte="1" wordType="checkboxlist"/>
+		<anonymisiert zeile="3" spalte="1" wordType="yesnolist"/>
+		<nutzerdaten zeile="4" spalte="1" wordType="yesnolist"/>
+		<zweck zeile="5" spalte="1" wordType="checkboxlist"/>
+		<dauer zeile="6" spalte="1" wordType="textinput"/> 
    </zugriffsdaten>
 </checkliste>

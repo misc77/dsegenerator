@@ -21,6 +21,18 @@ class DocGenerator:
         self.dseDocument = None
         self.processed = False
 
+    def formatList(self, text):
+        """formatList
+        
+        Arguments:
+            array {[type]} -- [description]
+        """
+        liste = ""
+        for item in text.split(','):
+            if item is not None:
+                liste += "- " + item + "\n"
+        return liste
+
     def containsElement(self, array, element):
         """[summary]Checks for element in list
         
